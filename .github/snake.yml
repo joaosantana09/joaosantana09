@@ -1,0 +1,28 @@
+name: Generate Snake
+
+on:
+  schedule: # roda todo dia às 23:59
+    - cron: "59 23 * * *"
+  workflow_dispatch: # permite rodar manualmente pelo Actions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate Snake SVG e GIF
+        uses: Platane/snk@v3
+        with:
+          github_user_name: joaosantana09
+          outputs: |
+            dist/snake.svg
+            dist/snake.gif
+
+      - name: Upload Snake para GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v3.1.0
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
